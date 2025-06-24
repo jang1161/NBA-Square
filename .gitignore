@@ -1,0 +1,2 @@
+# backend 설정 파일 (api키)
+nba-backend/src/main/resources/application.properties

@@ -1,0 +1,106 @@
+import { useParams } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import teams from "../data/teams";
+
+export default function TeamDetail() {
+  const { slug } = useParams();
+  const [team, setTeam] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [activeTab, setActiveTab] = useState("info"); // info, roster, coach, stats
+
+  useEffect(() => {
+    const teamInfo = teams.find(t => t.slug === slug);
+    if (!teamInfo) {
+      setError("잘못된 팀 경로입니다.");
+      setLoading(false);
+      return;
+    }
+
+    const teamId = teamInfo.id;
+
+    fetch(`http://localhost:8080/api/teams/${teamId}`)
+      .then(res => {
+        if (!res.ok) throw new Error("팀 정보를 불러올 수 없습니다.");
+        return res.json();
+      })
+      .then(data => {
+        setTeam(data);
+        setLoading(false);
+      })
+      .catch(err => {
+        setError(err.message);
+        setLoading(false);
+      });
+  }, [slug]);
+
+  if (loading) return <div className="p-6">로딩 중...</div>;
+  if (error) return <div className="p-6 text-red-500">{error}</div>;
+  if (!team) return <div className="p-6">팀을 찾을 수 없습니다.</div>;
+
+  return (
+    <div className="p-6 max-w-3xl mx-auto">
+      <h1 className="text-3xl font-bold mb-4">{team.fullName}</h1>
+
+      {/* 로고 + 팀 정보 영역 */}
+      <div className="flex items-start gap-6 mb-6">
+        <img src={`/logos/${slug}.png`} alt={team.name} className="h-32" />
+        <div className="space-y-1">
+          <p><strong>도시:</strong> {team.city}</p>
+          <p><strong>컨퍼런스:</strong> {team.conference}</p>
+          <p><strong>디비전:</strong> {team.division}</p>
+          <p><strong>약어:</strong> {team.abbreviation}</p>
+        </div>
+      </div>
+
+      {/* 탭 버튼 */}
+      <div className="flex border-b mb-6">
+        {["info", "roster", "coach", "stats"].map(tab => (
+          <button
+            key={tab}
+            onClick={() => setActiveTab(tab)}
+            className={`px-4 py-2 -mb-px border-b-2 font-semibold ${
+              activeTab === tab ? "border-blue-600 text-blue-600" : "border-transparent text-gray-600"
+            }`}
+          >
+            {tab === "info" && "팀 정보"}
+            {tab === "roster" && "선수 로스터"}
+            {tab === "coach" && "감독"}
+            {tab === "stats" && "시즌 성적"}
+          </button>
+        ))}
+      </div>
+
+      {/* 탭 내용 */}
+      <div>
+        {activeTab === "info" && (
+          <div>
+            <p><strong>도시:</strong> {team.city}</p>
+            <p><strong>컨퍼런스:</strong> {team.conference}</p>
+            <p><strong>디비전:</strong> {team.division}</p>
+            <p><strong>약어:</strong> {team.abbreviation}</p>
+          </div>
+        )}
+
+        {activeTab === "roster" && (
+          <div>
+            <p>선수 로스터 데이터는 아직 없습니다.</p>
+          </div>
+        )}
+
+        {activeTab === "coach" && (
+          <div>
+            <p>감독 정보는 아직 없습니다.</p>
+          </div>
+        )}
+
+        {activeTab === "stats" && (
+          <div>
+            <p>시즌별 성적 데이터는 아직 없습니다.</p>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+
+}
