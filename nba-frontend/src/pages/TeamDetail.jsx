@@ -1,6 +1,7 @@
 import { useParams } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import teams from "../data/teams";
+import PlayerRoster from "../components/Roaster";
 
 export default function TeamDetail() {
   const { slug } = useParams();
@@ -55,7 +56,7 @@ export default function TeamDetail() {
 
       {/* 탭 버튼 */}
       <div className="flex border-b mb-6">
-        {["info", "roster", "coach", "stats"].map(tab => (
+        {["roster", "coach", "stats", "schedule"].map(tab => (
           <button
             key={tab}
             onClick={() => setActiveTab(tab)}
@@ -63,30 +64,17 @@ export default function TeamDetail() {
               activeTab === tab ? "border-blue-600 text-blue-600" : "border-transparent text-gray-600"
             }`}
           >
-            {tab === "info" && "팀 정보"}
             {tab === "roster" && "선수 로스터"}
             {tab === "coach" && "감독"}
             {tab === "stats" && "시즌 성적"}
+            {tab === "schedule" && "경기 일정"}
           </button>
         ))}
       </div>
 
       {/* 탭 내용 */}
       <div>
-        {activeTab === "info" && (
-          <div>
-            <p><strong>도시:</strong> {team.city}</p>
-            <p><strong>컨퍼런스:</strong> {team.conference}</p>
-            <p><strong>디비전:</strong> {team.division}</p>
-            <p><strong>약어:</strong> {team.abbreviation}</p>
-          </div>
-        )}
-
-        {activeTab === "roster" && (
-          <div>
-            <p>선수 로스터 데이터는 아직 없습니다.</p>
-          </div>
-        )}
+        {activeTab === "roster" && <PlayerRoster teamId={team.id} />}
 
         {activeTab === "coach" && (
           <div>
