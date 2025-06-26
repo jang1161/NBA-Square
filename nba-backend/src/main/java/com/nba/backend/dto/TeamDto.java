@@ -1,6 +1,7 @@
 package com.nba.backend.dto;
 
-import com.nba.backend.model.Team;
+import com.nba.backend.entity.Team;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

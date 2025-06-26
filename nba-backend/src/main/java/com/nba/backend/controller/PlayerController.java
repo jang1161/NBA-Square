@@ -32,4 +32,16 @@ public class PlayerController {
             return ResponseEntity.internalServerError().build();
         }
     }
+
+    @GetMapping
+    public ResponseEntity<List<PlayerDto>> getAllPlayers(
+        @RequestParam(defaultValue = "2024-25") String season) {
+        try {
+            List<PlayerDto> players = playerService.getAllPlayers(season);
+            return ResponseEntity.ok(players);
+        } catch(Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.internalServerError().build();
+        }
+    }
 }

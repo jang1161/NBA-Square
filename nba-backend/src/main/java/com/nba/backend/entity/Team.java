@@ -1,4 +1,4 @@
-package com.nba.backend.model;
+package com.nba.backend.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

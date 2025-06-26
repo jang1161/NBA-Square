@@ -1,6 +1,6 @@
 package com.nba.backend.service;
 
-import com.nba.backend.model.Team;
+import com.nba.backend.entity.Team;
 import com.nba.backend.repository.TeamRepository;
 import org.springframework.stereotype.Service;
 

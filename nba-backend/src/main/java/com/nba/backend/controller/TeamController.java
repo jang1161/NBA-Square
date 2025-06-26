@@ -1,7 +1,7 @@
 package com.nba.backend.controller;
 
 import com.nba.backend.dto.TeamDto;
-import com.nba.backend.model.Team;
+import com.nba.backend.entity.Team;
 import com.nba.backend.service.TeamService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
