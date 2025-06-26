@@ -4,7 +4,7 @@ import localTeams from "../data/teams"; // slug, position 포함된 로컬 프�
 
 export default function Teams() {
   const [teams, setTeams] = useState([]);
-  const [viewMode, setViewMode] = useState("map");
+  const [viewMode, setViewMode] = useState("list");
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

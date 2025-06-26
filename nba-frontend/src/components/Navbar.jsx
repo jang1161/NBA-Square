@@ -4,7 +4,7 @@ export default function Navbar() {
   return (
     <nav className="bg-gray-800 p-2 text-white flex items-center space-x-4">
       <Link to="/" className="flex items-center space-x-2">
-        <img src="/logos/nba.png" alt="NBA Logo" className="h-12 rounded-sm" />
+        <img src="/logos/nba.png" alt="NBA Logo" className="h-12 rounded-sm ml-5" />
         <span className="text-2xl font-bold">NBA Square</span>
       </Link>
 

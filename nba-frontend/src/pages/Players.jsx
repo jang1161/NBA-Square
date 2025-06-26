@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 export default function Players() {
 	const [players, setPlayers] = useState([]);
@@ -47,13 +48,6 @@ export default function Players() {
 			<h1 className="text-2xl font-bold mb-4">Players List</h1>
 
 			<div className="flex items-center justify-start mb-6 gap-4">
-				<button
-					onClick={toggleView}
-					className="px-4 py-2 bg-slate-700 text-white rounded hover:bg-slate-600 transition"
-				>
-					{viewByTeam ? "전체 보기" : "팀별 보기"}
-				</button>
-
 				<input
 					type="text"
 					placeholder="선수 검색"
@@ -61,8 +55,15 @@ export default function Players() {
 					onChange={(e) => setSearchTerm(e.target.value)}
 					className="border p-2 rounded w-64"
 				/>
+
+				<button
+					onClick={toggleView}
+					className="px-4 py-2 bg-slate-700 text-white rounded hover:bg-slate-600 transition"
+				>
+					{viewByTeam ? "View All" : "View by Team"}
+				</button>
 			</div>
-			
+
 			{/* 선수 목록 */}
 			{!viewByTeam ? (
 				<div className="grid grid-cols-3 gap-2 text-sm">
@@ -71,7 +72,9 @@ export default function Players() {
 							key={player.id}
 							className="flex justify-between border-b pb-1 px-2"
 						>
-							<span>{player.fullName}</span>
+							<Link to={`/players/${player.id}`} className="cursor-pointer hover:underline">
+								{player.fullName}
+							</Link>
 							<span className="text-gray-600">{player.teamAbbreviation}</span>
 						</div>
 					))}
@@ -88,7 +91,9 @@ export default function Players() {
 										key={player.id}
 										className="flex justify-between border-b pb-1 px-2"
 									>
-										<span>{player.fullName}</span>
+										<Link to={`/players/${player.id}`} className="cursor-pointer hover:underline">
+											{player.fullName}
+										</Link>
 										<span className="text-gray-600">{player.teamAbbreviation}</span>
 									</div>
 								))}

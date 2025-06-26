@@ -20,7 +20,19 @@ public class PlayerController {
     @Autowired
     private PlayerService playerService;
 
-    @GetMapping("/{teamId}")
+    @GetMapping
+    public ResponseEntity<List<PlayerDto>> getAllPlayers(
+        @RequestParam(defaultValue = "2024-25") String season) {
+        try {
+            List<PlayerDto> players = playerService.getAllPlayers(season);
+            return ResponseEntity.ok(players);
+        } catch(Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.internalServerError().build();
+        }
+    }
+
+    @GetMapping("/team/{teamId}")
     public ResponseEntity<List<PlayerDto>> getPlayersByTeamId(
         @PathVariable Long teamId, 
         @RequestParam(defaultValue = "2024-25") String season) {
@@ -33,12 +45,11 @@ public class PlayerController {
         }
     }
 
-    @GetMapping
-    public ResponseEntity<List<PlayerDto>> getAllPlayers(
-        @RequestParam(defaultValue = "2024-25") String season) {
+    @GetMapping("/{id}")
+    public ResponseEntity<PlayerDto> getPlayerInfo(@PathVariable Long id) {
         try {
-            List<PlayerDto> players = playerService.getAllPlayers(season);
-            return ResponseEntity.ok(players);
+            PlayerDto player = playerService.getPlayerInfo(id);
+            return ResponseEntity.ok(player);
         } catch(Exception e) {
             e.printStackTrace();
             return ResponseEntity.internalServerError().build();

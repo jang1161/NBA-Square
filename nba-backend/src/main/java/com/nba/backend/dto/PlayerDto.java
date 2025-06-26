@@ -18,5 +18,9 @@ public class PlayerDto {
     private String weight;
     private Integer age;
     private Long teamId;
+    private String teamName;
     private String teamAbbreviation;
+    private String country;
+    private String draft;
+    private String school;
 }

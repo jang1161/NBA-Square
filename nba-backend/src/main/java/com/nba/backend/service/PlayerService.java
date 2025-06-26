@@ -7,6 +7,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.*;
 
 import org.springframework.http.HttpEntity;
@@ -18,6 +20,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class PlayerService {
     private RestTemplate restTemplate = new RestTemplate();
     private ObjectMapper objectMapper = new ObjectMapper();
+
     private HttpHeaders nbaHeaders() {
         HttpHeaders headers = new org.springframework.http.HttpHeaders();
         headers.set("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36");
@@ -34,21 +37,21 @@ public class PlayerService {
 
             JsonNode rowSet = objectMapper.readTree(response).get("resultSets").get(0).get("rowSet");
             List<PlayerDto> players = new ArrayList<>();
-            
+
             for (JsonNode playerArray : rowSet) {
                 PlayerDto player = new PlayerDto();
-                player.setId(playerArray.get(5).asLong());                     // PLAYER_ID
+                player.setId(playerArray.get(14).asLong()); // PLAYER_ID
                 player.setFirstName(playerArray.get(3).asText().split(" ")[0]); // PLAYER
-                player.setLastName(playerArray.get(3).asText().split(" ")[1]);  // PLAYER
-                player.setJersey(playerArray.get(6).asText());                  // NUM
-                player.setPosition(playerArray.get(7).asText());                // POSITION
-                player.setHeight(playerArray.get(8).asText());                  // HEIGHT
-                player.setWeight(playerArray.get(9).asText());                  // WEIGHT
-                player.setAge(playerArray.get(11).asInt());                     // AGE
+                player.setLastName(playerArray.get(3).asText().split(" ")[1]); // PLAYER
+                player.setJersey(playerArray.get(6).asText()); // NUM
+                player.setPosition(playerArray.get(7).asText()); // POSITION
+                player.setHeight(playerArray.get(8).asText()); // HEIGHT
+                player.setWeight(playerArray.get(9).asText()); // WEIGHT
+                player.setAge(playerArray.get(11).asInt()); // AGE
                 players.add(player);
             }
             return players;
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return new ArrayList<>();
         }
@@ -56,13 +59,14 @@ public class PlayerService {
 
     public List<PlayerDto> getAllPlayers(String season) {
         try {
-            String url = "https://stats.nba.com/stats/commonallplayers?IsOnlyCurrentSeason=1&LeagueID=00&Season=" + season;
+            String url = "https://stats.nba.com/stats/commonallplayers?IsOnlyCurrentSeason=1&LeagueID=00&Season="
+                    + season;
             HttpEntity<String> entity = new HttpEntity<>(nbaHeaders());
             String response = restTemplate.exchange(url, HttpMethod.GET, entity, String.class).getBody();
 
             JsonNode rowSet = objectMapper.readTree(response).get("resultSets").get(0).get("rowSet");
             List<PlayerDto> players = new ArrayList<>();
-            
+
             for (JsonNode playerArray : rowSet) {
                 PlayerDto player = new PlayerDto();
                 player.setId(playerArray.get(0).asLong());
@@ -72,10 +76,50 @@ public class PlayerService {
                 players.add(player);
             }
             return players;
-        } catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return new ArrayList<>();
         }
     }
 
+    public PlayerDto getPlayerInfo(Long id) {
+        try {
+            String url = "https://stats.nba.com/stats/commonplayerinfo?LeagueID=&PlayerID=" + id;
+            HttpEntity<String> entity = new HttpEntity<>(nbaHeaders());
+            String response = restTemplate.exchange(url, HttpMethod.GET, entity, String.class).getBody();
+
+            JsonNode rowSet = objectMapper.readTree(response).get("resultSets").get(0).get("rowSet");
+            JsonNode info = rowSet.get(0);
+
+            PlayerDto player = new PlayerDto();
+            player.setId(info.get(0).asLong());
+            player.setFullName(info.get(3).asText());
+            player.setTeamName(info.get(19).asText());
+            player.setJersey(info.get(14).asText());
+            player.setPosition(info.get(15).asText());
+            player.setHeight(formatHeight(info.get(11).asText()));
+            player.setWeight(info.get(12).asText() + " lbs");
+            player.setCountry(info.get(9).asText());
+            String draftInfo = info.get(29).asText().equals("Undrafted") ? "Undrafted"
+                    : info.get(29).asText() + " R" + info.get(30).asText() + " pick " + info.get(31).asText();
+            player.setDraft(draftInfo);
+            String birthdateStr = info.get(7).asText();
+            LocalDate birthDate = LocalDate.parse(birthdateStr.substring(0, 10));
+            int age = Period.between(birthDate, LocalDate.now()).getYears();
+            player.setAge(age);
+            player.setSchool(info.get(10).asText());
+
+            return player;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new PlayerDto();
+        }
+    }
+
+    public static String formatHeight(String h) {
+        String[] p = h.split("-");
+        int f = Integer.parseInt(p[0]), i = Integer.parseInt(p[1]);
+        int cm = (int) Math.round(f * 30.48 + i * 2.54);
+        return String.format("%d'%d\" (%dcm)", f, i, cm);
+    }
 }

@@ -8,7 +8,7 @@ export default function TeamDetail() {
   const [team, setTeam] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [activeTab, setActiveTab] = useState("info"); // info, roster, coach, stats
+  const [activeTab, setActiveTab] = useState("roster");
 
   useEffect(() => {
     const teamInfo = teams.find(t => t.slug === slug);
@@ -47,10 +47,10 @@ export default function TeamDetail() {
       <div className="flex items-start gap-6 mb-6">
         <img src={`/logos/${slug}.png`} alt={team.name} className="h-32" />
         <div className="space-y-1">
-          <p><strong>도시:</strong> {team.city}</p>
-          <p><strong>컨퍼런스:</strong> {team.conference}</p>
-          <p><strong>디비전:</strong> {team.division}</p>
-          <p><strong>약어:</strong> {team.abbreviation}</p>
+          <p><strong className="inline-block w-28">City</strong> {team.city}</p>
+          <p><strong className="inline-block w-28">Conference</strong> {team.conference}</p>
+          <p><strong className="inline-block w-28">Division</strong> {team.division}</p>
+          <p><strong className="inline-block w-28">Abbreviation</strong> {team.abbreviation}</p>
         </div>
       </div>
 
@@ -61,13 +61,13 @@ export default function TeamDetail() {
             key={tab}
             onClick={() => setActiveTab(tab)}
             className={`px-4 py-2 -mb-px border-b-2 font-semibold ${
-              activeTab === tab ? "border-blue-600 text-blue-600" : "border-transparent text-gray-600"
+              activeTab === tab ? "border-gray-800 text-gray-800" : "border-transparent text-gray-600"
             }`}
           >
-            {tab === "roster" && "선수 로스터"}
-            {tab === "coach" && "감독"}
-            {tab === "stats" && "시즌 성적"}
-            {tab === "schedule" && "경기 일정"}
+            {tab === "roster" && "Roster"}
+            {tab === "coach" && "Coach"}
+            {tab === "stats" && "Season Stats"}
+            {tab === "schedule" && "Schedule"}
           </button>
         ))}
       </div>

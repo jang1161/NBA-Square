@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 export default function PlayerRoster({ teamId }) {
   const [players, setPlayers] = useState([]);
@@ -13,8 +14,8 @@ export default function PlayerRoster({ teamId }) {
 
   useEffect(() => {
     if (!teamId) return;
-    
-    fetch(`http://localhost:8080/api/players/${teamId}?season=${season}`)
+
+    fetch(`http://localhost:8080/api/players/team/${teamId}?season=${season}`)
       .then(res => {
         if (!res.ok) throw new Error("선수 데이터를 불러올 수 없습니다.");
         return res.json();
@@ -40,7 +41,7 @@ export default function PlayerRoster({ teamId }) {
   return (
     <div className="space-y-4">
 
-      <div className="flex justify-between items-center mb-4">        
+      <div className="flex justify-between items-center mb-4">
         <div className="flex items-center space-x-2">
           <label htmlFor="season-select" className="text-sm font-medium text-gray-700">
             Season:
@@ -75,14 +76,15 @@ export default function PlayerRoster({ teamId }) {
           </thead>
           <tbody>
             {players.map((player, index) => (
-              <tr 
-                key={player.id} 
-                className={`border-b hover:bg-gray-50 transition-colors ${
-                  index % 2 === 0 ? 'bg-white' : 'bg-gray-25'
-                }`}
+              <tr
+                key={player.id}
+                className={`border-b hover:bg-gray-50 transition-colors ${index % 2 === 0 ? 'bg-white' : 'bg-gray-25'
+                  }`}
               >
                 <td className="py-3 px-4">
-                  <span className="font-semibold">{player.firstName} {player.lastName}</span>
+                  <Link to={`/players/${player.id}`} className="cursor-pointer hover:underline font-semibold">
+                    {player.firstName} {player.lastName}
+                  </Link>
                 </td>
                 <td className="py-3 px-4">
                   <span className="font-bold text-gray-600">#{player.jersey}</span>
