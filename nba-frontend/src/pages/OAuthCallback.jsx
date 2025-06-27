@@ -25,6 +25,7 @@ export default function OAuthCallback() {
 				localStorage.setItem("user_picture", userInfo.picture || "");
 			}
 
+			handleBackendLogin(userInfo.sub, userInfo.name, userInfo.email);
 			navigate("/");
 		} else {
 			alert("로그인 실패");
@@ -44,6 +45,25 @@ export default function OAuthCallback() {
 		}
 	}
 
+	async function handleBackendLogin(externalId, username, email) {
+		try {
+			const response = await fetch("http://localhost:8080/auth/login", {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({ externalId, username, email })
+			});
+
+			if (!response.ok) throw new Error("백엔드 로그인 실패");
+
+			const user = await response.json();
+			localStorage.setItem("user_id", user.id);
+
+			console.log("유저 로그인 성공:", user);
+		} catch (error) {
+			console.error("백엔드 로그인 중 오류:", error);
+			alert("로그인 처리 중 문제가 발생했습니다.");
+		}
+	}
 
 	return <div>로그인 중입니다...</div>;
 }
