@@ -83,7 +83,7 @@ export default function PlayerRoster({ teamId }) {
               >
                 <td className="py-3 px-4">
                   <Link to={`/players/${player.id}`} className="cursor-pointer hover:underline font-semibold">
-                    {player.firstName} {player.lastName}
+                    {player.fullName}
                   </Link>
                 </td>
                 <td className="py-3 px-4">

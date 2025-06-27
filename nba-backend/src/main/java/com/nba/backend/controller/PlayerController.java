@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.nba.backend.dto.PlayerDto;
+import com.nba.backend.dto.StatDto;
 import com.nba.backend.service.PlayerService;
 import java.util.*;
 
@@ -50,6 +51,17 @@ public class PlayerController {
         try {
             PlayerDto player = playerService.getPlayerInfo(id);
             return ResponseEntity.ok(player);
+        } catch(Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.internalServerError().build();
+        }
+    }
+
+    @GetMapping("/{id}/stats")
+    public ResponseEntity<List<StatDto>> getPlayerStats(@PathVariable Long id) {
+        try {
+            List<StatDto> stats = playerService.getPlayerStats(id);
+            return ResponseEntity.ok(stats);
         } catch(Exception e) {
             e.printStackTrace();
             return ResponseEntity.internalServerError().build();

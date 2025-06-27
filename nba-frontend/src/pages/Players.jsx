@@ -50,7 +50,7 @@ export default function Players() {
 			<div className="flex items-center justify-start mb-6 gap-4">
 				<input
 					type="text"
-					placeholder="선수 검색"
+					placeholder="Search"
 					value={searchTerm}
 					onChange={(e) => setSearchTerm(e.target.value)}
 					className="border p-2 rounded w-64"

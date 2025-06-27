@@ -1,6 +1,8 @@
 package com.nba.backend.service;
 
 import com.nba.backend.dto.PlayerDto;
+import com.nba.backend.dto.StatDto;
+
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.http.HttpHeaders;
@@ -40,14 +42,13 @@ public class PlayerService {
 
             for (JsonNode playerArray : rowSet) {
                 PlayerDto player = new PlayerDto();
-                player.setId(playerArray.get(14).asLong()); // PLAYER_ID
-                player.setFirstName(playerArray.get(3).asText().split(" ")[0]); // PLAYER
-                player.setLastName(playerArray.get(3).asText().split(" ")[1]); // PLAYER
-                player.setJersey(playerArray.get(6).asText()); // NUM
-                player.setPosition(playerArray.get(7).asText()); // POSITION
-                player.setHeight(playerArray.get(8).asText()); // HEIGHT
-                player.setWeight(playerArray.get(9).asText()); // WEIGHT
-                player.setAge(playerArray.get(11).asInt()); // AGE
+                player.setId(playerArray.get(14).asLong()); 
+                player.setFullName(playerArray.get(3).asText());
+                player.setJersey(playerArray.get(6).asText()); 
+                player.setPosition(playerArray.get(7).asText()); 
+                player.setHeight(playerArray.get(8).asText()); 
+                player.setWeight(playerArray.get(9).asText()); 
+                player.setAge(playerArray.get(11).asInt()); 
                 players.add(player);
             }
             return players;
@@ -116,10 +117,57 @@ public class PlayerService {
         }
     }
 
+    public List<StatDto> getPlayerStats(Long id) {
+        try {
+            String url = "https://stats.nba.com/stats/playercareerstats?LeagueID=&PerMode=Totals&PlayerID=" + id;
+            HttpEntity<String> entity = new HttpEntity<>(nbaHeaders());
+            String response = restTemplate.exchange(url, HttpMethod.GET, entity, String.class).getBody();
+
+            JsonNode rowSet = objectMapper.readTree(response).get("resultSets").get(0).get("rowSet");
+            List<StatDto> stats = new ArrayList<>();
+
+            for(int i = rowSet.size() - 1; i >= 0; i--) {
+                StatDto stat = new StatDto();
+                JsonNode statArray = rowSet.get(i);
+
+                stat.setPlayerId(statArray.get(0).asLong());
+                stat.setSeason(statArray.get(1).asText());
+                stat.setTeamAbb(statArray.get(4).asText());
+                stat.setGp(statArray.get(6).asInt());
+                stat.setMin(statArray.get(8).asDouble() / stat.getGp());
+                stat.setFgM(statArray.get(9).asDouble() / stat.getGp());
+                stat.setFgA(statArray.get(10).asDouble() / stat.getGp());
+                stat.setFgP(statArray.get(11).asDouble());
+                stat.setFg3M(statArray.get(12).asDouble() / stat.getGp());
+                stat.setFg3A(statArray.get(13).asDouble() / stat.getGp());
+                stat.setFg3P(statArray.get(14).asDouble());
+                stat.setFtM(statArray.get(15).asDouble() / stat.getGp());
+                stat.setFtA(statArray.get(16).asDouble() / stat.getGp());
+                stat.setFtP(statArray.get(17).asDouble());
+                stat.setOreb(statArray.get(18).asDouble() / stat.getGp());
+                stat.setDreb(statArray.get(19).asDouble() / stat.getGp());
+                stat.setReb(stat.getOreb() + stat.getDreb());
+                stat.setAst(statArray.get(21).asDouble() / stat.getGp());
+                stat.setStl(statArray.get(22).asDouble() / stat.getGp());
+                stat.setBlk(statArray.get(23).asDouble() / stat.getGp());
+                stat.setTov(statArray.get(24).asDouble() / stat.getGp());
+                stat.setPf(statArray.get(25).asDouble() / stat.getGp());
+                stat.setPts(statArray.get(26).asDouble() / stat.getGp());
+
+                stats.add(stat);
+            }
+            return stats;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ArrayList<>();
+        }
+    }
+
     public static String formatHeight(String h) {
         String[] p = h.split("-");
         int f = Integer.parseInt(p[0]), i = Integer.parseInt(p[1]);
         int cm = (int) Math.round(f * 30.48 + i * 2.54);
         return String.format("%d'%d\" (%dcm)", f, i, cm);
     }
+
 }
