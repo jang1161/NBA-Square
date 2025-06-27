@@ -31,10 +31,13 @@ export default function PostDetail() {
 
   return (
     <div className="p-6 max-w-3xl mx-auto">
-      <Link to="/board" className="text-blue-600 hover:underline mb-4 inline-block">← 목록으로</Link>
+      <Link to="/board" className="text-gray-800 hover:underline mb-4 inline-block">목록으로</Link>
 
       <h1 className="text-2xl font-bold mb-2">{post.title}</h1>
-      <p className="text-sm text-gray-600 mb-4">작성자: {post.author}</p>
+      <div className="text-sm text-gray-600 mb-4 flex space-x-4">
+        <span>작성자 {post.author}</span>
+        <span>작성일 {new Date(post.createdAt).toLocaleString("ko-KR")}</span>
+      </div>
       <p className="whitespace-pre-wrap">{post.content}</p>
     </div>
   );

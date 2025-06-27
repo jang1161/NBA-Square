@@ -6,14 +6,13 @@ export default function BoardWrite() {
 
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
-  const [author, setAuthor] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!title || !content || !author) {
+    if (!title || !content) {
       setError("모든 필드를 입력해주세요.");
       return;
     }
@@ -22,6 +21,7 @@ export default function BoardWrite() {
     setError(null);
 
     try {
+      const author = localStorage.getItem("user_name");
       const response = await fetch("http://localhost:8080/api/posts/create", {
         method: "POST",
         headers: {
@@ -69,17 +69,6 @@ export default function BoardWrite() {
             className="w-full border rounded px-3 py-2"
             rows={6}
             placeholder="내용을 입력하세요"
-          />
-        </div>
-
-        <div>
-          <label className="block mb-1 font-semibold">작성자</label>
-          <input
-            type="text"
-            value={author}
-            onChange={e => setAuthor(e.target.value)}
-            className="w-full border rounded px-3 py-2"
-            placeholder="작성자 이름을 입력하세요"
           />
         </div>
 
