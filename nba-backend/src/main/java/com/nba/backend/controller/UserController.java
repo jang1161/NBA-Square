@@ -27,7 +27,7 @@ public class UserController {
         String token = jwtUtil.createToken(user.getId(), user.getUsername());
 
         return ResponseEntity.ok(Map.of(
-            "token" , token,
+            "token", token,
             "id", user.getId(),
             "username", user.getUsername()
         ));

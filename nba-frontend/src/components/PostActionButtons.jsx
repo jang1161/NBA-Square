@@ -7,7 +7,7 @@ export default function PostActionButtons({ post }) {
   const token = localStorage.getItem("token");
 
   const handleDelete = async () => {
-    const confirm = window.confirm("정말 삭제하시겠습니까?");
+    const confirm = window.confirm("ㄹㅇ로?");
     if (!confirm) return;
 
     try {
@@ -28,11 +28,16 @@ export default function PostActionButtons({ post }) {
     }
   };
 
+  const handelEdit = async () => {
+    alert("귀찮아서 아직 안만들었다!");
+  }
+
   if (String(currentUserId) !== String(post.authorId)) return null;
 
   return (
     <div className="flex space-x-2 mt-4">
-      <button className="px-2 py-1 text-xs bg-gray-500 text-white rounded hover:bg-gray-600">
+      <button onClick={handelEdit}
+        className="px-2 py-1 text-xs bg-gray-500 text-white rounded hover:bg-gray-600">
         수정
       </button>
       <button
