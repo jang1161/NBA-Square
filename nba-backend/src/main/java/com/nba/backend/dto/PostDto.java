@@ -11,19 +11,30 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class PostResponseDto {
+public class PostDto {
     private Long id;
     private String title;
     private String content;
-    private String author;
+    private String authorName;
+    private Long authorId;
     private LocalDateTime createdAt;
 
-    public static PostResponseDto from(Post post) {
-        return new PostResponseDto(
+    public Post toEntity() {
+        Post post = new Post();
+        post.setTitle(this.title);
+        post.setContent(this.content);
+        post.setAuthorName(this.authorName);
+        post.setAuthorId(this.authorId);
+        return post;
+    }
+
+    public static PostDto from(Post post) {
+        return new PostDto(
             post.getId(),
             post.getTitle(),
             post.getContent(),
-            post.getAuthor(),
+            post.getAuthorName(),
+            post.getAuthorId(),
             post.getCreatedAt()
         );
     }

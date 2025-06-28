@@ -21,13 +21,14 @@ export default function BoardWrite() {
     setError(null);
 
     try {
-      const author = localStorage.getItem("user_name");
+      const authorName = localStorage.getItem("user_name");
+      const authorId = localStorage.getItem("user_id");
       const response = await fetch("http://localhost:8080/api/posts/create", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ title, content, author }),
+        body: JSON.stringify({ title, content, authorName, authorId }),
       });
 
       if (!response.ok) {

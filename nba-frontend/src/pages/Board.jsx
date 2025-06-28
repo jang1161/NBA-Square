@@ -53,7 +53,7 @@ export default function Board() {
               {post.title}
             </Link>
             <p className="text-sm text-gray-600">
-              작성자: {post.author} 작성일:{" "}
+              작성자: {post.authorName} 작성일:{" "}
               {new Date(post.createdAt).toLocaleString("ko-KR", {
                 year: "numeric",
                 month: "2-digit",
@@ -70,7 +70,7 @@ export default function Board() {
       <div className="mb-6">
         <button
           onClick={handleWriteClick}
-          className="px-2 py-1 mt-2 bg-gray-800 text-white rounded hover:bg-gray-600 transition"
+          className="text-sm px-2 py-1 mt-2 bg-gray-800 text-white rounded hover:bg-gray-600 transition"
         >
           글쓰기
         </button>

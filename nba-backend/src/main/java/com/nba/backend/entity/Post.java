@@ -29,16 +29,18 @@ public class Post {
 
     private String title;
     private String content;
-    private String author;
+    private String authorName;
+    private Long authorId;
 
     @CreatedDate
     private LocalDateTime createdAt;
     @LastModifiedDate
     private LocalDateTime updatedAt;
 
-    public Post(String title, String content, String author) {
+    public Post(String title, String content, String authorName, Long authorId) {
         this.title = title;
         this.content = content;
-        this.author = author;
+        this.authorName = authorName;
+        this.authorId = authorId;
     }
 }

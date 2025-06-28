@@ -2,12 +2,15 @@
 
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
+import PostActionButtons from "../components/PostActionButtons";
 
 export default function PostDetail() {
   const { id } = useParams();
   const [post, setPost] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const currentUserId = localStorage.getItem("user_id");
+  console.log("Current User Id: " + currentUserId);
 
   useEffect(() => {
     fetch(`http://localhost:8080/api/posts/${id}`)
@@ -35,10 +38,14 @@ export default function PostDetail() {
 
       <h1 className="text-2xl font-bold mb-2">{post.title}</h1>
       <div className="text-sm text-gray-600 mb-4 flex space-x-4">
-        <span>작성자 {post.author}</span>
+        <span>작성자 {post.authorName}</span>
         <span>작성일 {new Date(post.createdAt).toLocaleString("ko-KR")}</span>
       </div>
       <p className="whitespace-pre-wrap">{post.content}</p>
+
+      <PostActionButtons post={post} />
+
+      <Link to="/board" className="text-gray-800 hover:underline mt-2 inline-block">목록으로</Link>
     </div>
   );
 }

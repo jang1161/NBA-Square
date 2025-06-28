@@ -47,7 +47,7 @@ export default function OAuthCallback() {
 
 	async function handleBackendLogin(externalId, username, email) {
 		try {
-			const response = await fetch("http://localhost:8080/auth/login", {
+			const response = await fetch("http://localhost:8080/user/login", {
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify({ externalId, username, email })
@@ -57,6 +57,7 @@ export default function OAuthCallback() {
 
 			const user = await response.json();
 			localStorage.setItem("user_id", user.id);
+			localStorage.setItem("token", user.token);
 
 			console.log("유저 로그인 성공:", user);
 		} catch (error) {

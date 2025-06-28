@@ -1,0 +1,46 @@
+package com.nba.backend.util;
+
+import java.util.Date;
+
+import javax.crypto.SecretKey;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
+
+@Component
+public class JwtUtil {
+    @Value("${jwt.secret}")
+    private String secretKey;
+    private final long experiationMs = 1000 * 60 * 60 * 24; // 1일
+
+    public String createToken(Long userId, String username) {
+        return Jwts.builder()
+            .setSubject(username)
+            .claim("userId", userId)
+            .setIssuedAt(new Date())
+            .setExpiration(new Date(System.currentTimeMillis() + experiationMs))
+            .signWith(Keys.hmacShaKeyFor(secretKey.getBytes()), SignatureAlgorithm.HS256)
+            .compact();
+    }
+
+    public Claims parseClaims(String token) {
+        System.out.println("Inside parseClaims");
+        return Jwts.parserBuilder()
+            .setSigningKey(Keys.hmacShaKeyFor(secretKey.getBytes()))
+            .build()
+            .parseClaimsJws(token)
+            .getBody();
+    }
+
+    public Long getUserId(String token) {
+        System.out.println("Inside getUserId");
+        Claims claims = parseClaims(token);
+        System.out.println("Claims 전체: " + claims);
+        return claims.get("userId", Long.class);
+    }
+}
