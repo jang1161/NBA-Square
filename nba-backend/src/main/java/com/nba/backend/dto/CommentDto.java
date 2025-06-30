@@ -30,6 +30,8 @@ public class CommentDto {
 
     public static CommentDto from(Comment comment) {
         CommentDto commentDto = new CommentDto();
+        commentDto.setId(comment.getId());
+        commentDto.setAuthorId(comment.getAuthorId());
         commentDto.setAuthorName(comment.getAuthorName());
         commentDto.setContent(comment.getContent());
         commentDto.setCreatedAt(comment.getCreatedAt());

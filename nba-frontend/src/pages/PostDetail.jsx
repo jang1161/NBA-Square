@@ -62,7 +62,7 @@ export default function PostDetail() {
       <hr className="my-6" />
       <div className="text-sm mb-2">댓글</div>
       <CommentForm postId={post.id} onCommentSubmitted={fetchComments} />
-      <CommentList comments={comments} />
+      <CommentList comments={comments} onCommentDeleted={fetchComments} />
     </div>
   );
 }

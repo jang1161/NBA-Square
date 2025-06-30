@@ -4,10 +4,15 @@ export default function CommentForm({ postId, onCommentSubmitted }) {
   const [content, setContent] = useState("");
   const [error, setError] = useState(null);
   const [submitting, setSubmitting] = useState(false);
+  const isLoggedIn = !!localStorage.getItem("access_token");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (!isLoggedIn) {
+      alert("로그인 후 이용해주세요.");
+      return;
+    }
     if (!content.trim()) {
       setError("댓글 내용을 입력해주세요.");
       return;

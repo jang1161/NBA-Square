@@ -27,10 +27,12 @@ export default function OAuthCallback() {
 
 			console.log(userInfo);
 			handleBackendLogin(userInfo.sub, userInfo.name, userInfo.email);
-			navigate("/");
-			setTimeout(() => {
-				window.location.reload();
-		}, 100);
+			const redirectPath = localStorage.getItem("redirect_after_login") || "/";
+			localStorage.removeItem("redirect_after_login");
+			navigate(redirectPath);
+			// setTimeout(() => {
+			// 	window.location.reload();
+			// }, 100);
 		} else {
 			alert("로그인 실패");
 		}
@@ -54,7 +56,7 @@ export default function OAuthCallback() {
 			const response = await fetch("http://localhost:8080/user/login", {
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
-				body: JSON.stringify({ externalId, username, email})
+				body: JSON.stringify({ externalId, username, email })
 			});
 
 			if (!response.ok) throw new Error("로그인 실패");

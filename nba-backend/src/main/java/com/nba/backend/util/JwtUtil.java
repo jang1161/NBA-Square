@@ -27,7 +27,6 @@ public class JwtUtil {
     }
 
     public Claims parseClaims(String token) {
-        System.out.println("Inside parseClaims");
         return Jwts.parserBuilder()
             .setSigningKey(Keys.hmacShaKeyFor(secretKey.getBytes()))
             .build()
@@ -36,9 +35,7 @@ public class JwtUtil {
     }
 
     public Long getUserId(String token) {
-        System.out.println("Inside getUserId");
         Claims claims = parseClaims(token);
-        System.out.println("Claims 전체: " + claims);
         return claims.get("userId", Long.class);
     }
 }

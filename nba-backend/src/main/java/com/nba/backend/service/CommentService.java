@@ -40,4 +40,14 @@ public class CommentService {
         return dtos;
     }
 
+    public void deleteComment(Long id, String token) {
+        Comment comment = commentRepository.findById(id).orElseThrow(
+            () -> new IllegalArgumentException("해당 댓글이 존재하지 않습니다." + id));
+
+        Long userId = jwtUtil.getUserId(token);
+        if(userId != comment.getAuthorId())
+            throw new IllegalArgumentException("삭제 권한이 없습니다.");
+
+        commentRepository.deleteById(id);
+    }
 }

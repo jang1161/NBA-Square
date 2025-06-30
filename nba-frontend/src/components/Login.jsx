@@ -1,5 +1,6 @@
 function Login() {
     const googleLogin = () => {
+        localStorage.setItem("redirect_after_login", window.location.pathname);
         window.location.href = `https://accounts.google.com/o/oauth2/v2/auth?
 		client_id=${ process.env.REACT_APP_GOOGLE_CLIENT_ID }
 		&redirect_uri=${ process.env.REACT_APP_GOOGLE_REDIRECT_URL }

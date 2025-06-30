@@ -37,14 +37,11 @@ public class PostController {
     public ResponseEntity<?> deletePost(
         @PathVariable Long id,
         @RequestHeader("Authorization") String header) {
-        System.out.println("헤더: " + header);
         
         if(header == null || !header.startsWith("Bearer ")) {
-            System.out.println("헤더가 null이거나 Bearer값 X");
             return ResponseEntity.status(401).body("인증 토큰이 없습니다.");
         }
         String token = header.substring(7); // "Bearer " 삭제
-        System.out.println("token: " + token);
 
         try {
             postService.deletePost(id, token);
