@@ -9,7 +9,10 @@ export default function Teams() {
 
   useEffect(() => {
     fetch("http://localhost:8080/api/teams")
-      .then(res => res.json())
+      .then((res) => {
+				if (!res.ok) throw new Error("팀 정보를 불러오지 못했습니다.");
+				return res.json();
+			})
       .then(data => {
         // slug, position 병합
         const merged = data.map(team => {

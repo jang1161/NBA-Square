@@ -35,7 +35,6 @@ export default function BoardWrite() {
         throw new Error("글 작성에 실패했습니다.");
       }
 
-      // 작성 성공 시 게시판 목록으로 이동
       navigate("/board");
     } catch (err) {
       setError(err.message);

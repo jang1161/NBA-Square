@@ -1,6 +1,8 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function PlayerStatsTable({ stats }) {
+  const navigate = useNavigate();
   return (
     <div className="w-full max-w-4xl mx-auto mt-8">
       <h2 className="text-xl font-bold mb-4">Season Stats</h2>
@@ -27,7 +29,12 @@ export default function PlayerStatsTable({ stats }) {
             {stats.map((stat, index) => (
               <tr key={index} className="border-t hover:bg-gray-50">
                 <td className="px-3 py-2">{stat.season}</td>
-                <td className="px-3 py-2">{stat.teamAbb}</td>
+                <td
+                  className="px-3 py-2 cursor-pointer hover:underline"
+                  onClick={() => navigate(`/teams/${stat.teamAbb.toLowerCase()}`)}
+                >
+                  {stat.teamAbb}
+                </td>
                 <td className="px-3 py-2">{stat.gp}</td>
                 <td className="px-3 py-2">{stat.min.toFixed(2)}</td>
                 <td className="px-3 py-2">{stat.pts.toFixed(2)}</td>

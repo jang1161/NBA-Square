@@ -18,6 +18,7 @@ public class UserService {
         return userRepository.findByExternalId(dto.externalId)
             .orElseGet(() -> { 
                 User newUser = new User(dto.getExternalId(), dto.getUsername(), dto.getEmail()); 
+                System.out.println("Created new User: " + dto.getUsername());
                 return userRepository.save(newUser);
             });
     }

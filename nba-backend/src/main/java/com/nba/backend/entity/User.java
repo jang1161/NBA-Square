@@ -19,6 +19,7 @@ public class User {
     private Long id;
     
     private String username;
+    @Column(name = "external_id")
     private String externalId;
     private String email;
 

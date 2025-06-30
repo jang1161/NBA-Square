@@ -4,16 +4,11 @@ import Logout from "./Logout";
 import { useState, useEffect } from "react";
 
 export default function Navbar() {
-  const [userInfo, setUserInfo] = useState(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
-    const token = localStorage.getItem("access_token");
     const name = localStorage.getItem("user_name");
-    const picture = localStorage.getItem("user_picture");
-
-    if (token && name && picture) {
-      setUserInfo({ name, picture });
-    }
+    setIsLoggedIn(!!name);
   }, []);
 
   return (
@@ -31,7 +26,7 @@ export default function Navbar() {
       </div>
 
       <div className="ml-auto mr-5 p-1 border border-white rounded-md">
-        {userInfo ? (<Logout />) : (<Login />)}
+        {isLoggedIn ? (<Logout />) : (<Login />)}
       </div>
     </nav>
   );

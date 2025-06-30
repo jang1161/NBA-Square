@@ -7,5 +7,5 @@ import com.nba.backend.entity.Team;
 
 @Repository
 public interface TeamRepository extends JpaRepository<Team, Long> {
-    // 기본 CRUD 메서드 자동 제공
+
 }

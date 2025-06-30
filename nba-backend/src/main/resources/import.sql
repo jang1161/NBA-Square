@@ -1,5 +1,3 @@
-DELETE FROM teams;
-
 INSERT INTO teams (id, conference, division, city, name, full_name, abbreviation) VALUES
 (1610612737, 'East', 'Southeast', 'Atlanta', 'Hawks', 'Atlanta Hawks', 'ATL'),
 (1610612738, 'East', 'Atlantic', 'Boston', 'Celtics', 'Boston Celtics', 'BOS'),
