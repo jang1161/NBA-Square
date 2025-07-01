@@ -1,6 +1,7 @@
 package com.nba.backend.dto;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import com.nba.backend.entity.Post;
 
@@ -17,6 +18,7 @@ public class PostDto {
     private String content;
     private String authorName;
     private Long authorId;
+    private List<String> tags;
     private LocalDateTime createdAt;
 
     public Post toEntity() {
@@ -35,6 +37,7 @@ public class PostDto {
             post.getContent(),
             post.getAuthorName(),
             post.getAuthorId(),
+            post.getTags(),
             post.getCreatedAt()
         );
     }

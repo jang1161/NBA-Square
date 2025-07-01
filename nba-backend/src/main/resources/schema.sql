@@ -18,6 +18,11 @@ CREATE TABLE IF NOT EXISTS posts (
     updated_at TIMESTAMP
 );
 
+CREATE TABLE IF NOT EXISTS post_tags (
+    post_id BIGINT REFERENCES posts(id) ON DELETE CASCADE,
+    tag TEXT
+);
+
 CREATE TABLE IF NOT EXISTS comments (
     id BIGSERIAL PRIMARY KEY,
     post_id BIGINT NOT NULL,

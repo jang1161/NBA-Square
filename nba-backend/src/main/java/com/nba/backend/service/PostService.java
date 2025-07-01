@@ -16,6 +16,8 @@ public class PostService {
     @Autowired
     private PostRepository postRepository;
     @Autowired
+    private TaggingService taggingService;
+    @Autowired
     private JwtUtil jwtUtil;
 
     public List<PostDto> getAllPosts() {
@@ -27,7 +29,12 @@ public class PostService {
     }
 
     public PostDto createPost(PostDto dto) {
+        // String titleContent = dto.getTitle() + " " + dto.getContent();
+        // List<String> tags = taggingService.extractTags(titleContent);
+        
         Post post = dto.toEntity();
+        // post.setTags(tags);
+        
         Post saved = postRepository.save(post);
         return PostDto.from(saved);
     }

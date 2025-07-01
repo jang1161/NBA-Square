@@ -7,48 +7,59 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.client.SimpleClientHttpRequestFactory;
 
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.*;
-
-import org.springframework.http.HttpEntity;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
 public class PlayerService {
-    private RestTemplate restTemplate = new RestTemplate();
+    private RestTemplate restTemplate;
     private ObjectMapper objectMapper = new ObjectMapper();
 
+    public PlayerService() {
+        SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
+        factory.setConnectTimeout(10000); // 연결 타임아웃 10초
+        factory.setReadTimeout(15000); // 읽기 타임아웃 15초
+        this.restTemplate = new RestTemplate(factory);
+    }
+
     private HttpHeaders nbaHeaders() {
-        HttpHeaders headers = new org.springframework.http.HttpHeaders();
+        HttpHeaders headers = new HttpHeaders();
         headers.set("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36");
         headers.set("Referer", "https://stats.nba.com/");
         headers.set("Host", "stats.nba.com");
+        headers.set("Accept-Language", "en-US,en;q=0.9"); // 추가됨
         return headers;
     }
 
     public List<PlayerDto> getPlayersByTeamId(Long teamId, String season) {
         try {
-            String rosterUrl = "https://stats.nba.com/stats/commonteamroster?TeamID=" + teamId + "&Season=" + season;
+            String rosterUrl = "https://stats.nba.com/stats/commonteamroster?TeamID=" +
+            teamId + "&Season=" + season;
             HttpEntity<String> entity = new HttpEntity<>(nbaHeaders());
-            String response = restTemplate.exchange(rosterUrl, HttpMethod.GET, entity, String.class).getBody();
+            System.out.println("요청 헤더: " + entity.getHeaders());
 
+            String response = restTemplate.exchange(rosterUrl, HttpMethod.GET, entity,
+            String.class).getBody();
+            
             JsonNode rowSet = objectMapper.readTree(response).get("resultSets").get(0).get("rowSet");
             List<PlayerDto> players = new ArrayList<>();
 
             for (JsonNode playerArray : rowSet) {
                 PlayerDto player = new PlayerDto();
-                player.setId(playerArray.get(14).asLong()); 
+                player.setId(playerArray.get(14).asLong());
                 player.setFullName(playerArray.get(3).asText());
-                player.setJersey(playerArray.get(6).asText()); 
-                player.setPosition(playerArray.get(7).asText()); 
-                player.setHeight(playerArray.get(8).asText()); 
-                player.setWeight(playerArray.get(9).asText()); 
-                player.setAge(playerArray.get(11).asInt()); 
+                player.setJersey(playerArray.get(6).asText());
+                player.setPosition(playerArray.get(7).asText());
+                player.setHeight(playerArray.get(8).asText());
+                player.setWeight(playerArray.get(9).asText());
+                player.setAge(playerArray.get(11).asInt());
                 players.add(player);
             }
             return players;
@@ -63,6 +74,7 @@ public class PlayerService {
             String url = "https://stats.nba.com/stats/commonallplayers?IsOnlyCurrentSeason=1&LeagueID=00&Season="
                     + season;
             HttpEntity<String> entity = new HttpEntity<>(nbaHeaders());
+            System.out.println("header: " + entity.getHeaders());
             String response = restTemplate.exchange(url, HttpMethod.GET, entity, String.class).getBody();
 
             JsonNode rowSet = objectMapper.readTree(response).get("resultSets").get(0).get("rowSet");
@@ -126,7 +138,7 @@ public class PlayerService {
             JsonNode rowSet = objectMapper.readTree(response).get("resultSets").get(0).get("rowSet");
             List<StatDto> stats = new ArrayList<>();
 
-            for(int i = rowSet.size() - 1; i >= 0; i--) {
+            for (int i = rowSet.size() - 1; i >= 0; i--) {
                 StatDto stat = new StatDto();
                 JsonNode statArray = rowSet.get(i);
 
