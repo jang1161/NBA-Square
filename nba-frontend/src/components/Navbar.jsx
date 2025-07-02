@@ -23,6 +23,7 @@ export default function Navbar() {
         <Link to="/teams" className="hover:underline">Teams</Link>
         <Link to="/players" className="hover:underline">Players</Link>
         <Link to="/board" className="hover:underline">Board</Link>
+        <Link to="/chat" className="hover:underline">Chat</Link>
       </div>
 
       <div className="ml-auto mr-5 p-1 border border-white rounded-md">

@@ -43,7 +43,6 @@ public class PlayerService {
             String rosterUrl = "https://stats.nba.com/stats/commonteamroster?TeamID=" +
             teamId + "&Season=" + season;
             HttpEntity<String> entity = new HttpEntity<>(nbaHeaders());
-            System.out.println("요청 헤더: " + entity.getHeaders());
 
             String response = restTemplate.exchange(rosterUrl, HttpMethod.GET, entity,
             String.class).getBody();

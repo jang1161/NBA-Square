@@ -66,7 +66,7 @@
 		<dependency>
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
-			<version>42.6.0</version> <!-- 버전은 최신 안정 버전으로 설정 -->
+			<version>42.6.0</version>
 		</dependency>
 
 		<!-- JWT -->
@@ -87,6 +87,13 @@
 			<version>0.11.5</version>
 			<scope>runtime</scope>
 		</dependency>
+
+		<!-- WebSocket 통신 기능 -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-websocket</artifactId>
+		</dependency>
+
 
 	</dependencies>
 
